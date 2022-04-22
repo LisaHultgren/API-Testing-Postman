@@ -1,2 +1,2 @@
 # API-Testing-Postman
-API testing with Postman
+Schhol assignment - learning API testing with Postman
