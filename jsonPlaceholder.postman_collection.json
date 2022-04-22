@@ -1,0 +1,325 @@
+{
+	"info": {
+		"_postman_id": "bc20399d-fcbe-477d-b4cd-634dcea719ab",
+		"name": "jsonPlaceholder",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							" let jsonData = pm.response.json();",
+							"",
+							" pm.test(\"Response to have Json\", function () {",
+							"    pm.expect(pm.response.to.have.jsonBody);",
+							" });",
+							"pm.test(\"Test to get first persons name in the list of user\", function(){",
+							"    pm.expect(jsonData[0].name).to.eql(\"Leanne Graham\");",
+							"});",
+							"pm.test(\"Test that body matches string Leanne Graham\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Leanne Graham\");",
+							"});",
+							"pm.test(\"Test to get street for Leanne Graham\", function(){",
+							"    pm.expect(jsonData[0].address.street).to.equal(\"Kulas Light\"); ",
+							"});",
+							"pm.test(\"Test that street name is not null\", function(){",
+							"    pm.expect(jsonData[0].address.street).to.not.equal(null);",
+							"});  ",
+							"pm.test(\"Test that person at id 10 has correct quote\", function(){",
+							"    let person = jsonData[9];",
+							"   ",
+							"    pm.expect(person.company.catchPhrase).to.eql(\"Centralized empowering task-force\");",
+							"    console.log(\"Name:\",person.name);",
+							"    console.log(\"Catch phrase:\",person.company.catchPhrase);",
+							"});",
+							"pm.test(\"Test that status code is 200\", function () {",
+							"    pm.expect(pm.response.to.have.status(200));",
+							"    console.log(\"Status code is: \" + pm.response.status);",
+							"});",
+							"//Kolla detta två ovan och under",
+							"pm.test(\"Status code name is OK\", function () {",
+							"    pm.response.to.have.status(\"OK\");",
+							"    console.log(\"Status code is: \" + pm.response.code);",
+							"});",
+							"pm.test(\"Test that the header Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"pm.test(\"Test that response time is less than 100ms\", function () {",
+							"    if (pm.response.responseTime < 100 ) { ",
+							"        pm.expect(pm.response.responseTime).to.be.below(100);",
+							"    console.log(\"Response time is below 100ms and was: \" + pm.response.responseTime + \" ms. \" + pm.response.headers.get(\"Date\"));",
+							"    }",
+							"    else{",
+							"        console.log(\"Response time is higher than 100ms and was: \" + pm.response.responseTime + \" ms. \" + pm.response.headers.get(\"Date\"));",
+							"    }",
+							"});",
+							"//Saving this for use later in the delete request",
+							" pm.environment.set('personToDelete', jsonData[5].id);",
+							" console.log(pm.environment.get('personToDelete'));",
+							" console.log(jsonData[5].name)",
+							"//For use later in the put request",
+							" pm.environment.set('personToChange', jsonData[4].id);",
+							" console.log(jsonData[4].name);",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/users",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Test that created user gets an ID and as integer\", function(){",
+							"    pm.expect(jsonData.id).to.be.a(\"number\");",
+							"    console.log(\"Created users ID is: \" + jsonData.id);",
+							"});",
+							"pm.test(\"Test the users name is created\", function(){",
+							"    pm.expect(jsonData.name).to.eql(\"nemo\");",
+							"});",
+							"pm.test(\"Test that body has string/text\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"lostfish\");",
+							"    console.log(pm.response.text(\"lostfish\"));",
+							"});",
+							"pm.test(\"Test that status code is Created\", function () {",
+							"    pm.expect(pm.response.to.have.status(\"Created\"));",
+							"    console.log(pm.response.status);",
+							"});",
+							"pm.test(\"Test that status code is 201 and POST was created\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+							"    console.log(pm.response.code);",
+							"});",
+							"pm.test(\"Test that header Date is present\", function () {",
+							"    pm.expect(pm.response.to.have.header(\"Date\"));",
+							"    console.log(pm.response.headers.get(\"Date\"));",
+							"});",
+							"",
+							" //pm.environment.set('person', jsonData.id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n\n     \"name\": \"nemo\",\n\"username\": \"lostfish\",\n\"email\": \"nemo@finding.se\",\n\"address\": {\n      \"street\": \"Fish Light\",\n      \"suite\": \"Apt. 556\",\n      \"city\": \"Gwenborough\",\n      \"zipcode\": \"92998-3874\",\n      \"geo\": {\n                \"lat\": \"-43.9509\",\n                \"lng\": \"-34.4618\"\n            }\n        },\n        \"phone\": \"010-692-6593 x09125\",\n        \"website\": \"anastasia.net\",\n        \"company\": {\n            \"name\": \"Deckow-Crist\",\n            \"catchPhrase\": \"Proactive didactic contingency\",\n            \"bs\": \"synergize scalable supply-chains\"\n        }\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/users",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change a users name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();",
+							"pm.test(\"Test that the name is changed from old name\", function(){",
+							"    pm.expect(jsonData.name).to.not.eql(\"Chelsey Dietrich\");",
+							"});",
+							"pm.test(\"Test that name is changed to Lisa\", function(){",
+							"    pm.expect(jsonData.name).to.eql(\"Lisa\");",
+							"    console.log(jsonData.name);",
+							"});",
+							"pm.test(\"Test that Status code name has string OK\", function () {",
+							"    pm.response.to.have.status(\"OK\");",
+							"    console.log(pm.response.status);",
+							"});",
+							"pm.test(\"Test that Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    console.log(pm.response.code);",
+							"});",
+							"pm.test(\"Test that the header Date is present\", function(){",
+							"    pm.expect(pm.response.headers.get(\"Date\"));",
+							"    console.log(pm.response.headers.get(\"Date\"));",
+							"})",
+							"pm.test(\"Test if the response time is less than 200ms\", function () {",
+							"    if (pm.response.responseTime < 200 ) { ",
+							"        pm.expect(pm.response.responseTime).to.be.below(200);",
+							"    console.log(\"Response time is below 200ms and was: \" + pm.response.responseTime + \" ms. \" + pm.response.headers.get(\"Date\"));",
+							"    }",
+							"    else{",
+							"        console.log(\"Response time is higher than 200ms and was: \" + pm.response.responseTime + \" ms. \" + pm.response.headers.get(\"Date\"));",
+							"    }",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \n   \"name\": \"Lisa\"\n   \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/users/{{personToChange}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"users",
+						"{{personToChange}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete a user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();",
+							"pm.test(\"Body contains string\",() => {",
+							"  pm.expect(jsonData).to.be.empty;",
+							"});",
+							"pm.test(\"Test that Date is present in the headers\", function () {",
+							"    pm.response.to.have.header(\"Date\");",
+							"    console.log(pm.response.headers.get(\"Date\"));",
+							"});",
+							"pm.test(\"Test that Status code name has string OK\", function () {",
+							"    pm.response.to.have.status(\"OK\");",
+							"    console.log(pm.response.status);",
+							"});",
+							"pm.test(\"Test that Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    console.log(pm.response.code);",
+							"});",
+							"pm.test(\"Test that response time is less than 200ms\", function () {",
+							"    if (pm.response.responseTime < 200 ) { ",
+							"        pm.expect(pm.response.responseTime).to.be.below(200);",
+							"    console.log(\"Response time is below 200ms and was: \" + pm.response.responseTime + \" ms. \" + pm.response.headers.get(\"Date\"));",
+							"    }",
+							"    else{",
+							"        console.log(\"Response time is higher than 200ms and was: \" + pm.response.responseTime + \" ms. \" + pm.response.headers.get(\"Date\"));",
+							"    }",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/users/{{personToDelete}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"users",
+						"{{personToDelete}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
